@@ -42,7 +42,7 @@
                 | 
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
-                <input type="hidden" name="owner" value="{{cust.0}}"/>     <!-- I WANT THIS:::  name="owner" & "car_vin" value="{{cust.0}}" & "{{cust.2}}"/>  -->
+                <input type="hidden" name="car_vin" value="{{cust.0}}"/>  <!-- I WANT THIS:::  name="car_vin"&name="pick_up" value="{{cust.2}}" & "{{cust.3}}"/>  -->
                 <button onclick="return confirm('Are you sure you want to delete {{cust.0}}?');" type="submit" name="action" value="delete">Delete</button> 
               </form></td>
         </tr>
