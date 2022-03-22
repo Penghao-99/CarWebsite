@@ -39,7 +39,8 @@ urlpatterns = [
     
     path('personalinfo/edit/<str:id>', app.views.editpersonalinfo, name='editpersonalinfo'),  ##### how to choose 2 columns instead of 1 coz I want composite pri key
     path('personalcarinfo/edit/<str:id>', app.views.editpersonalcarinfo, name='editpersonalcarinfo'),  ##### and what is <str:id> ? can <str:email>????
-    path('unavailablecarinfo/edit/<str:id>', app.views.editunavailablecarinfo, name='editunavailablecarinfo'),
+    path('unavailablecarinfo/edit/<str:id>', app.views.editunavailablecarinfo, name='editunavailablecarinfo'), ### goes to html file editunavailablecarinfo.html 
+                                                                                                               ### to retrieve <str:id> from {{cust.0}}
     path('rentalcarinfo/edit/<str:id>', app.views.editrentalcarinfo, name='editrentalcarinfo'),
     
     path('profile', app.views.profile, name='profile'),
