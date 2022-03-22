@@ -206,7 +206,7 @@ def editpersonalinfo(request):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM customers WHERE email = %s", [id])
+        cursor.execute("SELECT * FROM customer WHERE email = %s", [id])
         obj = cursor.fetchone()
 
     status = ''
@@ -215,11 +215,11 @@ def editpersonalinfo(request):
     if request.POST:
         ##TODO: date validation
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE customers SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
+            cursor.execute("UPDATE customer SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
                     , [request.POST['first_name'], request.POST['last_name'], request.POST['username'],
                         request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'], id ])
             status = 'Customer edited successfully!'
-            cursor.execute("SELECT * FROM customers WHERE email = %s", [id])
+            cursor.execute("SELECT * FROM customer WHERE email = %s", [id])
             obj = cursor.fetchone()
 
     context["obj"] = obj
@@ -306,26 +306,32 @@ def editrentalcarinfo(request):
 
     return render(request,'app/editrentalcarinfo.html')
 
-def addpersonalinfo(request):
+def addpersonalinfo(request): 
     """Shows the addpersonalinfo page"""
     context = {}
     status = ''
-
+    
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-
-            cursor.execute("SELECT * FROM customers WHERE email = %s", [request.POST['email']])
-            customer = cursor.fetchone()
-            ## No customer with same id
-            if customer == None:
-                ##TODO: date validation
-                cursor.execute("INSERT INTO customers VALUES (%s, %s, %s, %s, %s, %s, %s)"
-                        , [request.POST['first_name'], request.POST['last_name'], request.POST['username'],
-                           request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'] ])
-                return redirect('Customers')   #redirects to html file name 
-            else:
-                status = 'Customer with email %s already exists' % (request.POST['email'])
+            try:
+                cursor.execute("INSERT INTO customer VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        , [request.POST.get('first_name'), request.POST.get('last_name'), request.POST.get('username'),
+                          request.POST.get('dob'), request.POST.get('password'), request.POST.get('confirmPassword'), request.POST.get('email')])
+            
+          ##### all these below is for tables with the check constraints to catch the constraint errors  
+            except Exception as e:
+                string = str(e)
+                message = ""
+                if 'duplicate key value violates unique constraint "customer_pkey"' in string:  
+                    message = 'The email has already been used by another user!' ## this one ok
+                elif 'new row for relation "customer" violates check constraint "customer_dob_check"' in string: ###### need go see correct error msg
+                    message = 'Sorry you must be older than 18!' 
+                elif 'new row for relation "customer" violates check constraint "customer_confirmPassword_check"' in string: 
+                    message = 'Please make sure your password match!' ########################### need go see correct error msg
+                messages.error(request, message)
+                return render(request, "addpersonalinfo.html")
+            return redirect('personalinfo') ##### i added this so it routes to personalinfo.html after
 
     context['status'] = status #optional 3rd parameter a dictionary in render() below
 
@@ -335,22 +341,28 @@ def addpersonalcarinfo(request):
     """Shows the addpersonalcarinfo page"""
     context = {}
     status = ''
-
+    
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-
-            cursor.execute("SELECT * FROM listings WHERE owner = %s", [request.POST['owner']])
-            customer = cursor.fetchone()
-            ## No customer with same id
-            if customer == None:
-                ##TODO: date validation
-                cursor.execute("INSERT INTO customers VALUES (%s, %s, %s, %s, %s, %s, %s)"
-                        , [request.POST['car_vin'], request.POST['carmake'], request.POST['model'],
-                           request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner'] ])
-                return redirect('Listings')    #was return redirect('index')
-            else:
-                status = 'Listing with owner %s and model %s already exists' % (request.POST['owner'],request.POST['model'])
+            try:
+                cursor.execute("INSERT INTO listings VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        , [request.POST.get('car_vin'), request.POST.get('carmake'), request.POST.get('model'),
+                          request.POST.get('year'), request.POST.get('mileage'), request.POST.get('rate'), request.POST.get('owner')])
+            
+          ##### all these below is for tables with the check constraints to catch the constraint errors  
+            except Exception as e:
+                string = str(e)
+                message = ""
+                if 'duplicate key value violates unique constraint "rentals_pkey"' in string:  
+                    message = 'The email has already been used by another user!' ## maybe please input the correct year! or correct number for mileage!
+                elif 'new row for relation "rentals" violates check constraint "rentals_pick_up_check"' in string: ###### need go see correct error msg
+                    message = 'Please check that drop_off date is not before pick_up date!'
+                elif 'new row for relation "rentals" violates check constraint "users_mobile_number_check"' in string:
+                    message = 'Please enter a valid Singapore number!'####################################### to edit
+                messages.error(request, message)
+                return render(request, "addpersonalcarinfo.html")
+            return redirect('personalcarinfo') ##### i added this so it routes to personalcarinfo.html after
 
     context['status'] = status
 
@@ -365,80 +377,135 @@ def addrentalcarinfo(request):
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
             try:
-          #      cursor.execute("INSERT INTO rentals VALUES(%s,%s)", [request.POST.get('car_vin'), request.POST.get('pick_up')])
                 cursor.execute("INSERT INTO rentals VALUES (%s, %s, %s, %s, %s, %s )"
                         , [request.POST.get('owner'), request.POST.get('renter'), request.POST.get('car_vin'),
                           request.POST.get('pick_up'), request.POST.get('drop_off'), request.POST.get('rental_fee')])
-                
+            
+          ##### all these below is for tables with the check constraints to catch the constraint errors  
             except Exception as e:
                 string = str(e)
                 message = ""
-                if 'duplicate key value violates unique constraint "users_pkey"' in string:  
-                    message = 'The email has already been used by another user!'
-                elif 'new row for relation "users" violates check constraint "users_email_address_check"' in string:
-                    message = 'Please enter a valid email address!'
-                elif 'new row for relation "users" violates check constraint "users_mobile_number_check"' in string:
-                    message = 'Please enter a valid Singapore number!'
+                if 'duplicate key value violates unique constraint "rentals_pkey"' in string:  
+                    message = 'The email has already been used by another user!' ####################################### to edit
+                elif 'new row for relation "rentals" violates check constraint "rentals_pick_up_check"' in string: ###### need go see correct error msg
+                    message = 'Please check that drop_off date is not before pick_up date!'
+                elif 'new row for relation "rentals" violates check constraint "users_mobile_number_check"' in string:
+                    message = 'Please enter a valid Singapore number!'####################################### to edit
                 messages.error(request, message)
-                return render(request, "add_Rental.html")
+                return render(request, "addrentalcarinfo.html")
+            return redirect('rentalcarinfo') ##### i added this so it routes to rentalcarinfo.html after 
             
     context['status'] = status
 
     return render(request,'app/addrentalcarinfo.html')
 
-def addunavailablecarinfo(request):
+def addunavailablecarinfo(request): ############################# to change to try and except method like addrentalcarinfo
     """Shows the addpersonalcarinfo page"""
     context = {}
     status = ''
-
+    
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-
-            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s", [request.POST['car_vin']])
-            customer = cursor.fetchone()
-            ## No customer with same id
-            if customer == None:
-                ##TODO: date validation
-                cursor.execute("INSERT INTO car_vin VALUES (%s, %s, %s)"
-                        , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'] ])
-                return redirect('Unavailable')    #redirects to HTML file
-            else:
-                status = 'Unavailablity of owner %s and date %s already exists' % (request.POST['owner'],request.POST['unavailable'])
+            try:
+                cursor.execute("INSERT INTO unavailable VALUES (%s, %s, %s)"
+                        , [request.POST.get('car_vin'), request.POST.get('owner'), request.POST.get('unavailable')])
+            
+          ##### all these below is for tables with the check constraints to catch the constraint errors  
+            except Exception as e:
+                string = str(e)
+                message = ""
+                if 'duplicate key value violates unique constraint "rentals_pkey"' in string:  
+                    message = 'The email has already been used by another user!' #### maybe "car_vin with unavailablility on this date alr exists!"
+                elif 'new row for relation "rentals" violates check constraint "rentals_pick_up_check"' in string: ###### need go see correct error msg
+                    message = 'Please check that drop_off date is not before pick_up date!'#### maybe "owner and car_vin doesnt exist in listings table!"
+                messages.error(request, message)
+                return render(request, "addunavailablecarinfo.html")
+            return redirect('unavailablecarinfo') ##### i added this so it routes to unavailablecarinfo.html after 
 
     context['status'] = status
 
     return render(request,'app/addunavailablecarinfo.html')
 
-#TO-DO LATER BELOW ALLL 4 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-def Listings(request): # CHANGE NAME TO PERSONAL INFO OR SMTH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+
+def personalinfo(request):
+    """Shows the personalinfo page"""
+
+    ## Delete customer
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM customer WHERE email = %s", [request.POST['email']]) ## gotta make sure the constraint satisfied...foreign key
+                ## can cursor.execute include multiple queries???? COZ NEED DELETE FROM TABLE BEFORE CAN DELETE FROM MASTERTABLE
+                ## DO I NEED TO MAKE SURE THAT?? COZ SCHEMA GOT ON DELETE CASCADE
+                #################################################################################################################################
+
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM customer ORDER BY email")
+        personalinfo = cursor.fetchall()
+
+    result_dict = {'records': personalinfo}
+
+    return render(request,'app/personalinfo.html',result_dict)
+
+def personalcarinfo(request):
+    """Shows the personalcarinfo page"""
+    
+    ## Delete listing
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM listings WHERE owner = %s AND car_vin = %s", [request.POST['owner'],request.POST['car_vin']]) ## gotta make sure the constraint satisfied...foreign key
+                ## can cursor.execute include multiple queries???? COZ NEED DELETE FROM TABLE BEFORE CAN DELETE FROM MASTERTABLE
+                ## DO I NEED TO MAKE SURE THAT?? COZ SCHEMA GOT ON DELETE CASCADE
+                #################################################################################################################################
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM listings ORDER BY owner")
-        customers = cursor.fetchall()
+        personalcarinfo = cursor.fetchall()
 
-    result_dict = {'records': customers}
+    result_dict = {'records': personalcarinfo}
     
-    return render(request,'app/Listings.html',result_dict) #CHANGE TO CORRECT HTML @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    return render(request,'app/personalcarinfo.html',result_dict) 
 
-def Unavailable(request):
+def unavailablecarinfo(request):
+    """Shows the unavailablecarinfo page"""
+    
+    ## Delete unavailable
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM unavailable WHERE car_vin = %s AND unavailable = %s", [request.POST['car_vin'],request.POST['unavailable']])
+                
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM unavailable ORDER BY car_vin")
-        customers = cursor.fetchall()
+        unavailablecarinfo = cursor.fetchall()
 
-    result_dict = {'records': customers}
+    result_dict = {'records': unavailablecarinfo}
     
-    return render(request,'app/Unavailable.html',result_dict)
+    return render(request,'app/unavailablecarinfo.html',result_dict)
 
-def Rentals(request):
+def rentalcarinfo(request):
+    """Shows the rentalcarinfo page"""
+    
+    ## Delete rental
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM unavailable WHERE car_vin = %s AND owner = %s", [request.POST['car_vin'],request.POST['owner']])
+                
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM rentals ORDER BY car_vin")
-        customers = cursor.fetchall()
+        rentalcarinfo = cursor.fetchall()
 
-    result_dict = {'records': customers}
+    result_dict = {'records': rentalcarinfo}
     
-    return render(request,'app/Rentals.html',result_dict)
+    return render(request,'app/rentalcarinfo.html',result_dict)
