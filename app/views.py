@@ -193,19 +193,219 @@ def profile(request):
 
     return render(request,'app/profile.html')
 
+
+
+
+
+
+
+
 def editpersonalinfo(request):
     """Shows the editpersonalinfo page"""
+     context ={}
+
+    # fetch the object related to passed id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM customers WHERE email = %s", [id])
+        obj = cursor.fetchone()
+
+    status = ''
+    # save the data from the form
+
+    if request.POST:
+        ##TODO: date validation
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE customers SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
+                    , [request.POST['first_name'], request.POST['last_name'], request.POST['username'],
+                        request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'], id ])
+            status = 'Customer edited successfully!'
+            cursor.execute("SELECT * FROM customers WHERE email = %s", [id])
+            obj = cursor.fetchone()
+
+    context["obj"] = obj
+    context["status"] = status
 
     return render(request,'app/editpersonalinfo.html')
 
 def editpersonalcarinfo(request):
     """Shows the editpersonalcarinfo page"""
+    context ={}
+
+    # fetch the object related to passed id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM listings WHERE owner = %s", [id])
+        obj = cursor.fetchone()
+
+    status = ''
+    # save the data from the form
+
+    if request.POST:
+        ##TODO: date validation
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE listings SET car_vin = %s, carmake = %s, model = %s, year = %s, mileage = %s, rate = %s, owner = %s WHERE owner = %s"
+                    , [request.POST['car_vin'], request.POST['carmake'], request.POST['model'],
+                        request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner'], id ])
+            status = 'Listing edited successfully!'
+            cursor.execute("SELECT * FROM listings WHERE owner = %s", [id])
+            obj = cursor.fetchone()
+
+    context["obj"] = obj
+    context["status"] = status
 
     return render(request,'app/editpersonalcarinfo.html')
 
+def editunavailablecarinfo(request):
+    """Shows the editpersonalcarinfo page"""
+    context ={}
+
+    # fetch the object related to passed id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s", [id])
+        obj = cursor.fetchone()
+
+    status = ''
+    # save the data from the form
+
+    if request.POST:
+        ##TODO: date validation
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE unavailable SET car_vin = %s, owner = %s, unavailable = %s WHERE car_vin = %s"
+                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'], id ])
+            status = 'Unavailable edited successfully!'
+            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s", [id])
+            obj = cursor.fetchone()
+
+    context["obj"] = obj
+    context["status"] = status
+
+    return render(request,'app/editunavailablecarinfo.html')
+
 def editrentalcarinfo(request):
     """Shows the editrentalcarinfo page"""
+    context ={}
+
+    # fetch the object related to passed id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [id])
+        obj = cursor.fetchone()
+
+    status = ''
+    # save the data from the form
+
+    if request.POST:
+        ##TODO: date validation
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE rentals SET owner = %s, renter = %s, car_vin = %s, pick_up = %s, drop_off = %s, rental_fee = %s WHERE car_vin = %s"
+                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'], id ])
+            status = 'Rental edited successfully!'
+            cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [id])
+            obj = cursor.fetchone()
+
+    context["obj"] = obj
+    context["status"] = status
 
     return render(request,'app/editrentalcarinfo.html')
 
-    
+def addpersonalinfo(request):
+    """Shows the addpersonalinfo page"""
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+
+            cursor.execute("SELECT * FROM customers WHERE email = %s", [request.POST['email']])
+            customer = cursor.fetchone()
+            ## No customer with same id
+            if customer == None:
+                ##TODO: date validation
+                cursor.execute("INSERT INTO customers VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        , [request.POST['first_name'], request.POST['last_name'], request.POST['username'],
+                           request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'] ])
+                return redirect('Customers')   #redirects to html file name 
+            else:
+                status = 'Customer with email %s already exists' % (request.POST['email'])
+
+    context['status'] = status #optional 3rd parameter a dictionary in render() below
+
+    return render(request,'app/addpersonalinfo.html')
+
+def addpersonalcarinfo(request):
+    """Shows the addpersonalcarinfo page"""
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+
+            cursor.execute("SELECT * FROM listings WHERE owner = %s", [request.POST['owner']])
+            customer = cursor.fetchone()
+            ## No customer with same id
+            if customer == None:
+                ##TODO: date validation
+                cursor.execute("INSERT INTO customers VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        , [request.POST['car_vin'], request.POST['carmake'], request.POST['model'],
+                           request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner'] ])
+                return redirect('Listings')    #was return redirect('index')
+            else:
+                status = 'Listing with owner %s and model %s already exists' % (request.POST['owner'],request.POST['model'])
+
+    context['status'] = status
+
+    return render(request,'app/addpersonalcarinfo.html')
+
+def addrentalcarinfo(request):
+    """Shows the addrentalcarinfo page"""
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+            try:
+          #      cursor.execute("INSERT INTO rentals VALUES(%s,%s)", [request.POST.get('car_vin'), request.POST.get('pick_up')])
+                cursor.execute("INSERT INTO rentals VALUES (%s, %s, %s, %s, %s, %s )"
+                        , [request.POST.get('owner'), request.POST.get('renter'), request.POST.get('car_vin'),
+                          request.POST.get('pick_up'), request.POST.get('drop_off'), request.POST.get('rental_fee')])
+                
+            except Exception as e:
+                string = str(e)
+                message = ""
+                if 'duplicate key value violates unique constraint "users_pkey"' in string:  
+                    message = 'The email has already been used by another user!'
+                elif 'new row for relation "users" violates check constraint "users_email_address_check"' in string:
+                    message = 'Please enter a valid email address!'
+                elif 'new row for relation "users" violates check constraint "users_mobile_number_check"' in string:
+                    message = 'Please enter a valid Singapore number!'
+                messages.error(request, message)
+                return render(request, "add_Rental.html")
+            
+    context['status'] = status
+
+    return render(request,'app/addrentalcarinfo.html')
+
+def addunavailablecarinfo(request):
+    """Shows the addpersonalcarinfo page"""
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+
+            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s", [request.POST['car_vin']])
+            customer = cursor.fetchone()
+            ## No customer with same id
+            if customer == None:
+                ##TODO: date validation
+                cursor.execute("INSERT INTO car_vin VALUES (%s, %s, %s)"
+                        , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'] ])
+                return redirect('Unavailable')    #redirects to HTML file
+            else:
+                status = 'Unavailablity of owner %s and date %s already exists' % (request.POST['owner'],request.POST['unavailable'])
+
+    context['status'] = status
+
+    return render(request,'app/addunavailablecarinfo.html')
