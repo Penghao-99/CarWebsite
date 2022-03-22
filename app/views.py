@@ -409,3 +409,36 @@ def addunavailablecarinfo(request):
     context['status'] = status
 
     return render(request,'app/addunavailablecarinfo.html')
+
+#TO-DO LATER BELOW ALLL 4 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+def Listings(request): # CHANGE NAME TO PERSONAL INFO OR SMTH @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM listings ORDER BY owner")
+        customers = cursor.fetchall()
+
+    result_dict = {'records': customers}
+    
+    return render(request,'app/Listings.html',result_dict) #CHANGE TO CORRECT HTML @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+def Unavailable(request):
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM unavailable ORDER BY car_vin")
+        customers = cursor.fetchall()
+
+    result_dict = {'records': customers}
+    
+    return render(request,'app/Unavailable.html',result_dict)
+
+def Rentals(request):
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM rentals ORDER BY car_vin")
+        customers = cursor.fetchall()
+
+    result_dict = {'records': customers}
+    
+    return render(request,'app/Rentals.html',result_dict)
