@@ -1,1 +1,47 @@
+{% load static %}
+<html>
+<body>
+    <h2> Unavailable Car Info database </h2>
+    <img src="{% static 'app/images/Unavailable.jpg' %}" width="10%"   alt="Unavailable logo"/><br/>
+    <a href="addunavailablecarlinfo"><button> Add Unavailable Car Info </button></a>   <!--href goes to urls.py and then urls.py goes to views.py  -->
+                                                                         
+    <br>
+    <br>
+    </div>
 
+    <div class="home">
+      <button class="personalcarinfo"><a href="personalcarinfo"> Personal Car Info database </a></button>
+      <button class="personalinfo"><a href="personalinfoinfo"> Personal database </a></button>
+      <button class="rentalcarinfo"><a href="rentalcarinfo"> Rental Car database </a></button>
+    </div>
+    </div>
+    <br/><br/>
+    <br>
+    <br>
+    <br/><br/>
+    <table border=1>
+        <thead>
+            <th>Car VIN</th>
+            <th>Owner</th>
+            <th>Unavailable dates</th>
+            
+        </thead>
+        {% for cust in records %}             <!-- records is the key in the dictionary in the last 4 methods in views.py -->
+        <tr>
+            <td> {{ cust.0 }} </td>
+            <td> {{ cust.1 }} </td>
+            <td> {{ cust.2 }} </td>
+            <td>
+                <a href="unavailablecarinfo/edit/{{cust.1}}"><button>Edit Unavailable Car Info</button></a> 
+                |                                                                  <!-- TODO: unavailablecarinfo/edit/{{cust.1}}??{{cust.2}} -->
+                <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="owner" value="{{cust.1}}"/> <!-- I WANT THIS:::  name="car_vin" & "unavailable" value="{{cust.1}}" & "{{cust.2}}"/>  -->
+                <button onclick="return confirm('Are you sure you want to delete {{cust.0}}?');" type="submit" name="action" value="delete">Delete</button> 
+              </form></td>
+        </tr>
+        {% endfor %}
+    </table>
+     
+</body>
+</html>
