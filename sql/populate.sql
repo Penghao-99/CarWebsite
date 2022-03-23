@@ -1,4 +1,5 @@
 
+--POPULATE CUSTOMER TABLE
 insert into customer (first_name, last_name, username, dob, password, confirmpassword, email) values ('Martyn', 'Van der Spohr', 'mvanderspohr0', '8/10/2001', 'b0tbG1wm7YzZ', 'b0tbG1wm7YzZ', 'mvanderspohr0@google.ca');
 insert into customer (first_name, last_name, username, dob, password, confirmpassword, email) values ('Ben', 'McVeigh', 'bmcveigh1', '3/3/2001', 'PWdKZvjhJ', 'PWdKZvjhJ', 'bmcveigh1@fema.gov');
 insert into customer (first_name, last_name, username, dob, password, confirmpassword, email) values ('Clair', 'Scutter', 'cscutter2', '10/12/2001', 'ZKyyUGrahIkf', 'ZKyyUGrahIkf', 'cscutter2@vinaora.com');
@@ -21,16 +22,16 @@ insert into listings (car_vin, carmake, model, year, mileage, rate, owner) value
 insert into listings (car_vin, carmake, model, year, mileage, rate, owner) values ('5N1AN0NU1CN694265', 'Chevrolet', 'Suburban 1500', 1995, 19175, 45717, 'awarry9@statcounter.com');
 insert into listings (car_vin, carmake, model, year, mileage, rate, owner) values ('JN8AZ2KRXBT327366', 'Audi', 'TT', 2011, 59961, 62219, 'awarry9@statcounter.com');
 
-insert into unavailable (car_vin, owner, unavailable) values ('3N1AB6AP3AL362912', 'ksprulls4@fda.gov', '12/14/2022');
-insert into unavailable (car_vin, owner, unavailable) values ('3N1AB6AP3AL362912', 'ksprulls4@fda.gov', '01/24/2023');
-insert into unavailable (car_vin, owner, unavailable) values ('3N1AB6AP3AL362912', 'ksprulls4@fda.gov', '10/01/2023');
+insert into unavailable (car_vin, owner, unavailable) values ('3N1AB6AP3AL362912', 'ksprulls4@fda.gov', '2022-12-14');
+insert into unavailable (car_vin, owner, unavailable) values ('3N1AB6AP3AL362912', 'ksprulls4@fda.gov', '2023-01-24');
+insert into unavailable (car_vin, owner, unavailable) values ('3N1AB6AP3AL362912', 'ksprulls4@fda.gov', '2023-01-10');
 insert into unavailable (car_vin, owner, unavailable) values ('JN8AZ2KRXBT327366', 'awarry9@statcounter.com', '02/03/2023');
-insert into unavailable (car_vin, owner, unavailable) values ('JN8AZ2KRXBT327366', 'awarry9@statcounter.com', '09/22/2022');
-insert into unavailable (car_vin, owner, unavailable) values ('5N1AN0NU1CN694265', 'awarry9@statcounter.com', '03/05/2022');
-insert into unavailable (car_vin, owner, unavailable) values ('5N1AN0NU1CN694265', 'awarry9@statcounter.com', '04/08/2022');
-insert into unavailable (car_vin, owner, unavailable) values ('WA1LMBFE7ED541878', 'sbompass8@cnet.com', '12/23/2022');
-insert into unavailable (car_vin, owner, unavailable) values ('WAUSFAFL2BA782648', 'sbompass8@cnet.com', '07/12/2022');
-insert into unavailable (car_vin, owner, unavailable) values ('WAUSFAFL2BA782648', 'sbompass8@cnet.com', '08/17/2022');
+insert into unavailable (car_vin, owner, unavailable) values ('JN8AZ2KRXBT327366', 'awarry9@statcounter.com', '2022-09-22');
+insert into unavailable (car_vin, owner, unavailable) values ('5N1AN0NU1CN694265', 'awarry9@statcounter.com', '2022-09-23');
+insert into unavailable (car_vin, owner, unavailable) values ('5N1AN0NU1CN694265', 'awarry9@statcounter.com', '2022-08-04');
+insert into unavailable (car_vin, owner, unavailable) values ('WA1LMBFE7ED541878', 'sbompass8@cnet.com', '2022-12-23');
+insert into unavailable (car_vin, owner, unavailable) values ('WAUSFAFL2BA782648', 'sbompass8@cnet.com', '2022-12-07');
+insert into unavailable (car_vin, owner, unavailable) values ('WAUSFAFL2BA782648', 'sbompass8@cnet.com', '2022-08-17');
 
 insert into rentals (owner,renter,car_vin,pick_up,drop_off,rental_fee)
 values
