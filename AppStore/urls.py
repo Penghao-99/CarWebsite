@@ -23,7 +23,7 @@ import app.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', app.views.login, name='login'),           ########## penghao to cheng hong: ideally once admin login, the website should go to ..../personalinfo   
-    path('index', app.views.index, name='index'),                        ########     |
+   #path('index', app.views.index, name='index'),                        ########     |
     path('signup', app.views.signup, name='signup'),                      #######    \|/
     path('personalinfo', app.views.personalinfo, name='personalinfo'),    ####### should go to this line 
     path('personalcarinfo', app.views.personalcarinfo, name='personalcarinfo'),
