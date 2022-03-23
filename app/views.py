@@ -202,7 +202,7 @@ def profile(request):
 
 def editpersonalinfo(request):
     """Shows the editpersonalinfo page"""
-     context ={}
+    context ={}
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
