@@ -296,7 +296,8 @@ def editrentalcarinfo(request):
         ##TODO: date validation
         with connection.cursor() as cursor:
             cursor.execute("UPDATE rentals SET owner = %s, renter = %s, car_vin = %s, pick_up = %s, drop_off = %s, rental_fee = %s WHERE car_vin = %s"
-                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'], id ])
+                    , [request.POST['owner'], request.POST['renter'], request.POST['car_vin'], request.POST['pick_up'],request.POST['drop_off'],
+                      request.POST['rental_fee'],request.POST['car_vin']])
             status = 'Rental edited successfully!'
             cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [id])
             obj = cursor.fetchone()
