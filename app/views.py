@@ -286,7 +286,7 @@ def editrentalcarinfo(request):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [id]) ########deleted id2, what is id referring to???
+        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [request.POST['car_vin'],request.POST['unavailable']]) ########deleted id, what is id referring to???
         obj = cursor.fetchone()
 
     status = ''
