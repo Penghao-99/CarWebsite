@@ -41,7 +41,7 @@ urlpatterns = [
     path('personalcarinfo/edit/<str:id>', app.views.editpersonalcarinfo, name='editpersonalcarinfo'),  ##### and what is <str:id> ? can <str:email>????
     path('unavailablecarinfo/edit/<str:id>', app.views.editunavailablecarinfo, name='editunavailablecarinfo'), ### goes to html file editunavailablecarinfo.html 
                                                                                                                ### to retrieve <str:id> from {{cust.0}}
-    path('rentalcarinfo/edit/<str:id>', app.views.editrentalcarinfo, name='editrentalcarinfo'),
+    path('rentalcarinfo/edit/<str:id><str:id2>', app.views.editrentalcarinfo, name='editrentalcarinfo'),
     
     path('profile', app.views.profile, name='profile'),
    #path('view/<str:id>', app.views.view, name='view'),
