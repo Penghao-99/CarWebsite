@@ -286,7 +286,7 @@ def editrentalcarinfo(request):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [id])
+        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [id,id2])
         obj = cursor.fetchone()
 
     status = ''
