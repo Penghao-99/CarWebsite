@@ -1,1 +1,24 @@
+<html>
+<body>
+    <h2>Add New Personal Info below</h2>
+    <a href="/personalinfo">Back to Personal Info database </a>
+    <p style="color:red">{{ status|safe }}</p>
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
+        First Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="first_name" maxlength="64" class="textinput textInput" required="" id="id_first_name"> </div> </div> <div id="div_id_last_name" class="control-group"> <label for="id_last_name" class="control-label requiredField">
+        Last Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="last_name" maxlength="64" class="textinput textInput" required="" id="id_last_name"> </div> </div> <div id="div_id_email" class="control-group"> <label for="id_email" class="control-label requiredField">
+        Username<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="email" maxlength="64" class="textinput textInput" required="" id="id_email"> </div> </div> <div id="div_id_dob" class="control-group"> <label for="id_dob" class="control-label requiredField">
+        Date of Birth<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="dob" maxlength="16" class="dateinput" required="" id="id_dob"> </div> </div> <div id="div_id_since" class="control-group"> <label for="id_since" class="control-label requiredField">
+        Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="since" maxlength="64" class="dateinput" required="" id="id_since"> </div> </div> <div id="div_id_customerid" class="control-group"> <label for="id_customerid" class="control-label requiredField">
+        Confirm Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="customerid" maxlength="64" class="textinput textInput" required="" id="id_customerid"> </div> </div> <div id="div_id_country" class="control-group"> <label for="id_country" class="control-label requiredField">
+        Email<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="country" maxlength="256" class="textinput textInput" required="" id="id_country"> </div> </div>
 
+        <br>
+        <button type="submit" value="Add">Add</button>
+    </form>
+</body>
+</html>
