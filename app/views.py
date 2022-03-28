@@ -228,7 +228,7 @@ def editpersonalinfo(request,email):
 
     return render(request,'app/editpersonalinfo.html',context)
 
-def editpersonalcarinfo(request):
+def editpersonalcarinfo(request,owner):
     """Shows the editpersonalcarinfo page"""
     context ={}
 
@@ -255,7 +255,7 @@ def editpersonalcarinfo(request):
 
     return render(request,'app/editpersonalcarinfo.html',context)
 
-def editunavailablecarinfo(request):
+def editunavailablecarinfo(request,car_vin, unavailable):
     """Shows the editpersonalcarinfo page"""
     context ={}
 
