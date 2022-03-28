@@ -19,7 +19,7 @@
       <div id="div_id_car_vin" class="control-group"> <label for="id_car_vin" class="control-label requiredField">
         Car VIN<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="car_vin" value="{{obj.2}}" maxlength="64" class="textinput textInput" required="" id="id_model"> </div> </div> 
       <div id="div_id_pick_up" class="control-group"> <label for="id_pick_up" class="control-label requiredField">
-        Pick-up date (mm/dd/yyyy)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="pick_up" value="{{obj.3}}" class="dateinput" required="" id="id_dob"> </div> </div> 
+        Pick-up date (mm/dd/yyyy)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="pick_up" value="{{obj.3| date:"M d Y"}}" class="dateinput" required="" id="id_dob"> </div> </div> 
       <div id="div_id_drop_off" class="control-group"> <label for="id_drop_off" class="control-label requiredField">
         Drop-off date (mm/dd/yyyy)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="drop_off" value="{{obj.4}}" class="dateinput" required="" id="id_since"> </div> </div> 
       <div id="div_id_rental_fee" class="control-group"> <label for="id_rental_fee" class="control-label requiredField">
