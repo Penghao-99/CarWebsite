@@ -200,7 +200,7 @@ def profile(request):
 
 
 
-def editpersonalinfo(request):
+def editpersonalinfo(request,email):
     """Shows the editpersonalinfo page"""
     context ={}
 
