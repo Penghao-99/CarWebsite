@@ -206,7 +206,7 @@ def editpersonalinfo(request):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM customer WHERE email = %s", [id])
+        cursor.execute("SELECT * FROM customer WHERE email = %s", [email])
         obj = cursor.fetchone()
 
     status = ''
@@ -217,9 +217,9 @@ def editpersonalinfo(request):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE customer SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
                     , [request.POST['first_name'], request.POST['last_name'], request.POST['username'],
-                        request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'], id ])
+                        request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'], email ])
             status = 'Customer edited successfully!'
-            cursor.execute("SELECT * FROM customer WHERE email = %s", [id])
+            cursor.execute("SELECT * FROM customer WHERE email = %s", [email])
             obj = cursor.fetchone()
 
     context["obj"] = obj
