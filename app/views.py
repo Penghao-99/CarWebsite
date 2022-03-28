@@ -226,7 +226,7 @@ def editpersonalinfo(request,email):
     context["obj"] = obj
     context["status"] = status
 
-    return render(request,'app/editpersonalinfo.html')
+    return render(request,'app/editpersonalinfo.html',context)
 
 def editpersonalcarinfo(request):
     """Shows the editpersonalcarinfo page"""
@@ -234,7 +234,7 @@ def editpersonalcarinfo(request):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM listings WHERE owner = %s", [id])
+        cursor.execute("SELECT * FROM listings WHERE owner = %s", [owner])
         obj = cursor.fetchone()
 
     status = ''
@@ -245,15 +245,15 @@ def editpersonalcarinfo(request):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE listings SET car_vin = %s, carmake = %s, model = %s, year = %s, mileage = %s, rate = %s, owner = %s WHERE owner = %s"
                     , [request.POST['car_vin'], request.POST['carmake'], request.POST['model'],
-                        request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner'], id ])
+                        request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner'], owner ])
             status = 'Listing edited successfully!'
-            cursor.execute("SELECT * FROM listings WHERE owner = %s", [id])
+            cursor.execute("SELECT * FROM listings WHERE owner = %s", [owner])
             obj = cursor.fetchone()
 
     context["obj"] = obj
     context["status"] = status
 
-    return render(request,'app/editpersonalcarinfo.html')
+    return render(request,'app/editpersonalcarinfo.html',context)
 
 def editunavailablecarinfo(request):
     """Shows the editpersonalcarinfo page"""
@@ -261,7 +261,7 @@ def editunavailablecarinfo(request):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s", [id])
+        cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s AND unavailable = %s", [car_vin,unavailable]) ##to do ...date format wrong. check %s meaning
         obj = cursor.fetchone()
 
     status = ''
@@ -270,16 +270,16 @@ def editunavailablecarinfo(request):
     if request.POST:
         ##TODO: date validation
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE unavailable SET car_vin = %s, owner = %s, unavailable = %s WHERE car_vin = %s"
-                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'], id ])
+            cursor.execute("UPDATE unavailable SET car_vin = %s, owner = %s, unavailable = %s WHERE car_vin = %s AND unavailable = %s"
+                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'], [car_vin,unavailable] ])
             status = 'Unavailable edited successfully!'
-            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s", [id])
+            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s AND unavailable = %s", [car_vin,unavailable])
             obj = cursor.fetchone()
 
     context["obj"] = obj
     context["status"] = status
 
-    return render(request,'app/editunavailablecarinfo.html')
+    return render(request,'app/editunavailablecarinfo.html',context)
 
 def editrentalcarinfo(request,car_vin, pick_up): #<input type="hidden" name="car_vin" value="{{cust.2}}"/>      in rentalcarinfo.html
                                                      #<input type="hidden" name="unavailable" value="{{cust.3}}"/>
