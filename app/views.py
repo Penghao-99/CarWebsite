@@ -280,7 +280,7 @@ def editunavailablecarinfo(request):
 
     return render(request,'app/editunavailablecarinfo.html')
 
-def editrentalcarinfo(request,car_vin, unavailable): #<input type="hidden" name="car_vin" value="{{cust.2}}"/>      in rentalcarinfo.html
+def editrentalcarinfo(request,car_vin, pick_up): #<input type="hidden" name="car_vin" value="{{cust.2}}"/>      in rentalcarinfo.html
                                                      #<input type="hidden" name="unavailable" value="{{cust.3}}"/>
                                                      
     """Shows the editrentalcarinfo page"""
@@ -288,7 +288,7 @@ def editrentalcarinfo(request,car_vin, unavailable): #<input type="hidden" name=
 
     # fetch the object related to passed car_vin and unavailable
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [car_vin,unavailable]) 
+        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [car_vin,pick_up]) 
         obj = cursor.fetchone()
 
     status = ''
