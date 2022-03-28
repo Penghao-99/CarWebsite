@@ -204,7 +204,7 @@ def editpersonalinfo(request,email):
     """Shows the editpersonalinfo page"""
     context ={}
 
-    # fetch the object related to passed id
+    # fetch the object related to passed email
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM customer WHERE email = %s", [email])
         obj = cursor.fetchone()
@@ -280,13 +280,15 @@ def editunavailablecarinfo(request):
 
     return render(request,'app/editunavailablecarinfo.html')
 
-def editrentalcarinfo(request):
+def editrentalcarinfo(request,car_vin, unavailable): #<input type="hidden" name="car_vin" value="{{cust.2}}"/>      in rentalcarinfo.html
+                                                     #<input type="hidden" name="unavailable" value="{{cust.3}}"/>
+                                                     
     """Shows the editrentalcarinfo page"""
     context ={}
 
-    # fetch the object related to passed id
+    # fetch the object related to passed car_vin and unavailable
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [request.POST['car_vin'],request.POST['unavailable']]) ########deleted id, what is id referring to???
+        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [car_vin,unavailable]) 
         obj = cursor.fetchone()
 
     status = ''
@@ -299,7 +301,7 @@ def editrentalcarinfo(request):
                     , [request.POST['owner'], request.POST['renter'], request.POST['car_vin'], request.POST['pick_up'],request.POST['drop_off'],
                       request.POST['rental_fee'],request.POST['car_vin']])
             status = 'Rental edited successfully!'
-            cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [id])
+            cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [car_vin])
             obj = cursor.fetchone()
 
     context["obj"] = obj
