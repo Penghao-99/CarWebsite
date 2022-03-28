@@ -288,7 +288,7 @@ def editrentalcarinfo(request,car_vin, pick_up): #<input type="hidden" name="car
 
     # fetch the object related to passed car_vin and unavailable
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND unavailable = %s", [car_vin,pick_up]) 
+        cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND pick_up = %s", [car_vin,pick_up]) 
         obj = cursor.fetchone()
 
     status = ''
