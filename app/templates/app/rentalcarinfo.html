@@ -40,7 +40,7 @@
             <td> {{ cust.4 }} </td>
             <td> {{ cust.5 }} </td>
             <td>
-                <a href="rentalcarinfo/edit/{{cust.2}}/{{cust.3}}"><button>Edit Rental Car Info</button></a>      
+                <a href="rentalcarinfo/edit/{{cust.2}}/{{cust.3| date:"M d Y"}}"><button>Edit Rental Car Info</button></a>      
                 | 
                 <form method="POST" style="display: inline;">  
                 {% csrf_token %}
