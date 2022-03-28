@@ -32,12 +32,13 @@
             <td> {{ cust.1 }} </td>
             <td> {{ cust.2 }} </td>
             <td>
-                <a href="unavailablecarinfo/edit/{{cust.1}}"><button>Edit Unavailable Car Info</button></a> 
+                <a href="unavailablecarinfo/edit/{{cust.0}}/{{cust.2}}"><button>Edit Unavailable Car Info</button></a> 
                 |                                                                  <!-- TODO: unavailablecarinfo/edit/{{cust.1}}??{{cust.2}} -->
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
-                <input type="hidden" name="owner" value="{{cust.1}}"/> <!-- I WANT THIS:::  name="car_vin" & "unavailable" value="{{cust.1}}" & "{{cust.2}}"/>  -->
-                <button onclick="return confirm('Are you sure you want to delete {{cust.0}}?');" type="submit" name="action" value="delete">Delete</button> 
+                <input type="hidden" name="car_vin" value="{{cust.0}}"/>
+                <input type="hidden" name="unavailable" value="{{cust.2}}"/> 
+                <button onclick="return confirm('Are you sure you want to delete {{cust.0}},{{cust.2}}?');" type="submit" name="action" value="delete">Delete</button> 
               </form></td>
         </tr>
         {% endfor %}
