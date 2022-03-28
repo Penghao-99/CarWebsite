@@ -308,7 +308,7 @@ def editrentalcarinfo(request,car_vin, pick_up): #<input type="hidden" name="car
     context["obj"] = obj
     context["status"] = status
 
-    return render(request,'app/editrentalcarinfo.html')
+    return render(request,'app/editrentalcarinfo.html',context)
 
 def addpersonalinfo(request): 
     """Shows the addpersonalinfo page"""
