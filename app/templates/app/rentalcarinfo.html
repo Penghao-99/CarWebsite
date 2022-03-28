@@ -40,8 +40,7 @@
             <td>
                 <a href="rentalcarinfo/edit/{{cust.2}}/{{cust.3}}"><button>Edit Rental Car Info</button></a>      
                 | 
-                <form method="POST" style="display: inline;">  (this one is the choose correct row coz composite pri) AND THEN THE URL thing want make unique
-                                                                                                            so that can edit correct row also
+                <form method="POST" style="display: inline;">  
                 {% csrf_token %}
                 <input type="hidden" name="car_vin" value="{{cust.2}}"/>  <!-- I WANT THIS:::  name="car_vin"&name="pick_up" value="{{cust.2}}" & "{{cust.3}}"/>  -->
                 <input type="hidden" name="pick_up" value="{{cust.3}}"/> 
