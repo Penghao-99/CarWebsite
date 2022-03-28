@@ -1,7 +1,7 @@
 {% load static %}
 <html>
 <body>
-    <h2> Personal Car Info database </h2>
+    <h2> Rental Car Info database </h2>
     <img src="{% static 'app/images/Rental.png' %}" width="10%"   alt="Rental logo"/><br/>
     <a href="addrentalcarinfo"><button> Add Rental Car Info </button></a>   <!--href goes to urls.py and then urls.py goes to views.py  -->
                                                                          
@@ -44,7 +44,7 @@
                                                                                                             so that can edit correct row also
                 {% csrf_token %}
                 <input type="hidden" name="car_vin" value="{{cust.2}}"/>  <!-- I WANT THIS:::  name="car_vin"&name="pick_up" value="{{cust.2}}" & "{{cust.3}}"/>  -->
-                <input type="hidden" name="unavailable" value="{{cust.3}}"/> 
+                <input type="hidden" name="pick_up" value="{{cust.3}}"/> 
                 <button onclick="return confirm('Are you sure you want to delete {{cust.2}},{{cust.3}} ?');" type="submit" name="action" value="delete">Delete</button> 
               </form></td>
         </tr>
