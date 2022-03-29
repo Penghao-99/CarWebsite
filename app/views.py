@@ -215,14 +215,39 @@ def editpersonalinfo(request,email):
 
     if request.POST:
         ##TODO: date validation
+        #HERE I HAVE TO CHECK PROFILE IDENTICAL TO OLD ONE
+        
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE customer SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
-                    , [request.POST.get('first_name'), request.POST.get('last_name'), request.POST.get('username'),
-                        request.POST.get('dob') , request.POST.get('password'), request.POST.get('confirmPassword'), request.POST.get('email'), email ])
-            status = 'Customer edited successfully!'
-            cursor.execute("SELECT * FROM customer WHERE email = %s", [email])
-            obj = cursor.fetchone()
+            try:
+                cursor.execute("UPDATE customer SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
+                        , [request.POST.get('first_name'), request.POST.get('last_name'), request.POST.get('username'),
+                            request.POST.get('dob') , request.POST.get('password'), request.POST.get('confirmPassword'), request.POST.get('email'), email ])
+                status = 'Customer edited successfully!'
+                cursor.execute("SELECT * FROM customer WHERE email = %s", [email])
+                obj = cursor.fetchone()
+                
+            except Exception as e:
+                string = str(e)
+                message = string
+		
+                if 'new row for relation "customer" violates check constraint "customer_mobile_number_check"' in string:
+                    message = 'Please enter a valid Singapore number!'
+		
+                elif 'out of range for type integer' in string:
+                    message = 'Please enter a valid Singapore number!'
 
+                elif 'out of range for type integer' in string:
+                    message = 'Please enter a valid Singapore number!'
+
+                elif 'duplicate key value violates unique constraint "customer_username_key"' in string:
+                    message = 'Customer username taken!'
+                    
+                messages.error(request, message) 
+                return render(request, 'app/editpersonalinfo.html', context)
+	
+            messages.success(request, 'Profile has been successfully updated!')
+            return redirect('profile')  #or return redirect('personalinfo') ????
+        
     context["obj"] = obj
     context["status"] = status
 
