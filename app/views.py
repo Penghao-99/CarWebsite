@@ -300,7 +300,7 @@ def editrentalcarinfo(request,car_vin, pick_up): #<input type="hidden" name="car
         with connection.cursor() as cursor:
             cursor.execute("UPDATE rentals SET owner = %s, renter = %s, car_vin = %s, pick_up = %s, drop_off = %s, rental_fee = %s WHERE car_vin = %s AND pick_up = %s"
                     , [request.POST.get('owner'), request.POST.get('renter'), request.POST.get('car_vin'), request.POST.get('pick_up'),request.POST.get('drop_off'),
-                      request.POST.get('rental_fee'),request.POST.get('car_vin'), car_vin, pick_up])
+                      request.POST.get('rental_fee'), car_vin, pick_up])
             status = 'Rental edited successfully!'
             cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND pick_up = %s", [car_vin,datetime.datetime.strptime(pick_up,'%b %d %Y').strftime('%m/%d/%Y')])
             obj = cursor.fetchone()
