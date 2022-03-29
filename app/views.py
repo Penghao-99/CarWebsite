@@ -503,7 +503,7 @@ def rentalcarinfo(request):
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM unavailable WHERE car_vin = %s AND owner = %s", [request.POST['car_vin'],request.POST['owner']])
+                cursor.execute("DELETE FROM rentals WHERE car_vin = %s AND pick_up = %s", [request.POST['car_vin'],request.POST['pick_up']])
                 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
