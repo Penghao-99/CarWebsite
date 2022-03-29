@@ -245,7 +245,7 @@ def editpersonalcarinfo(request,owner,car_vin):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE listings SET car_vin = %s, carmake = %s, model = %s, year = %s, mileage = %s, rate = %s, owner = %s WHERE owner = %s AND car_vin = %s"
                     , [request.POST.get('car_vin'), request.POST.get('carmake'), request.POST.get('model'),
-                        request.POST.get('year') , request.POST.get('mileage'), request.POST.get('rate'), request.POST.get('owner'), [owner,car_vin])
+                        request.POST.get('year') , request.POST.get('mileage'), request.POST.get('rate'), request.POST.get('owner'), owner,car_vin])
             status = 'Listing edited successfully!'
             cursor.execute("SELECT * FROM listings WHERE owner = %s AND car_vin = %s", [owner,car_vin])
             obj = cursor.fetchone()
