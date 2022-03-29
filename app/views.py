@@ -217,8 +217,8 @@ def editpersonalinfo(request,email):
         ##TODO: date validation
         with connection.cursor() as cursor:
             cursor.execute("UPDATE customer SET first_name = %s, last_name = %s, username = %s, dob = %s, password = %s, confirmPassword = %s, email = %s WHERE email = %s"
-                    , [request.POST['first_name'], request.POST['last_name'], request.POST['username'],
-                        request.POST['dob'] , request.POST['password'], request.POST['confirmPassword'], request.POST['email'], email ])
+                    , [request.POST.get('first_name'), request.POST.get('last_name'), request.POST.get('username'),
+                        request.POST.get('dob') , request.POST.get('password'), request.POST.get('confirmPassword'), request.POST.get('email'), email ])
             status = 'Customer edited successfully!'
             cursor.execute("SELECT * FROM customer WHERE email = %s", [email])
             obj = cursor.fetchone()
