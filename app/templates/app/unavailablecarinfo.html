@@ -34,7 +34,7 @@
             <td> {{ cust.2 | date:"M d Y"}} </td>
             <td>
                 <a href="unavailablecarinfo/edit/{{cust.0}}/{{cust.2| date:"M d Y"}}"><button>Edit Unavailable Car Info</button></a> 
-                |                                                                  <!-- TODO: unavailablecarinfo/edit/{{cust.1}}??{{cust.2}} -->
+                |                                                                  
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="car_vin" value="{{cust.0}}"/>
