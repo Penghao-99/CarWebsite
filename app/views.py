@@ -228,13 +228,13 @@ def editpersonalinfo(request,email):
 
     return render(request,'app/editpersonalinfo.html',context)
 
-def editpersonalcarinfo(request,owner):
+def editpersonalcarinfo(request,owner,car_vin):
     """Shows the editpersonalcarinfo page"""
     context ={}
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM listings WHERE owner = %s", [owner])
+        cursor.execute("SELECT * FROM listings WHERE owner = %s AND car_vin = %s", [owner,car_vin])
         obj = cursor.fetchone()
 
     status = ''
@@ -245,9 +245,9 @@ def editpersonalcarinfo(request,owner):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE listings SET car_vin = %s, carmake = %s, model = %s, year = %s, mileage = %s, rate = %s, owner = %s WHERE owner = %s"
                     , [request.POST['car_vin'], request.POST['carmake'], request.POST['model'],
-                        request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner'], owner ])
+                        request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner']])
             status = 'Listing edited successfully!'
-            cursor.execute("SELECT * FROM listings WHERE owner = %s", [owner])
+            cursor.execute("SELECT * FROM listings WHERE owner = %s AND car_vin = %s", [owner,car_vin])
             obj = cursor.fetchone()
 
     context["obj"] = obj
