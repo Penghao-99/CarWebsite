@@ -243,9 +243,9 @@ def editpersonalcarinfo(request,owner,car_vin):
     if request.POST:
         ##TODO: date validation
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE listings SET car_vin = %s, carmake = %s, model = %s, year = %s, mileage = %s, rate = %s, owner = %s WHERE owner = %s"
-                    , [request.POST['car_vin'], request.POST['carmake'], request.POST['model'],
-                        request.POST['year'] , request.POST['mileage'], request.POST['rate'], request.POST['owner']])
+            cursor.execute("UPDATE listings SET car_vin = %s, carmake = %s, model = %s, year = %s, mileage = %s, rate = %s, owner = %s WHERE owner = %s AND car_vin = %s"
+                    , [request.POST.get('car_vin'), request.POST.get('carmake'), request.POST.get('model'),
+                        request.POST.get('year') , request.POST.get('mileage'), request.POST.get('rate'), request.POST.get('owner'), [owner,car_vin])
             status = 'Listing edited successfully!'
             cursor.execute("SELECT * FROM listings WHERE owner = %s AND car_vin = %s", [owner,car_vin])
             obj = cursor.fetchone()
