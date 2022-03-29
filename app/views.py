@@ -489,7 +489,7 @@ def unavailablecarinfo(request):
                 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM unavailable ORDER BY car_vin")
+        cursor.execute("SELECT * FROM unavailable ORDER BY unavailable")
         unavailablecarinfo = cursor.fetchall()
 
     result_dict = {'records': unavailablecarinfo}
@@ -507,7 +507,7 @@ def rentalcarinfo(request):
                 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM rentals ORDER BY car_vin")
+        cursor.execute("SELECT * FROM rentals ORDER BY pick_up")
         rentalcarinfo = cursor.fetchall()
 
     result_dict = {'records': rentalcarinfo}
