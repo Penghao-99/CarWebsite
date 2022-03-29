@@ -261,7 +261,7 @@ def editunavailablecarinfo(request,car_vin, unavailable):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s AND unavailable = %s", [car_vin,unavailable]) ##to do ...date format wrong. check %s meaning
+        cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s AND unavailable = %s", [car_vin,datetime.datetime.strptime(unavailable,'%b %d %Y').strftime('%m/%d/%Y')])
         obj = cursor.fetchone()
 
     status = ''
@@ -271,9 +271,9 @@ def editunavailablecarinfo(request,car_vin, unavailable):
         ##TODO: date validation
         with connection.cursor() as cursor:
             cursor.execute("UPDATE unavailable SET car_vin = %s, owner = %s, unavailable = %s WHERE car_vin = %s AND unavailable = %s"
-                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable'], [car_vin,unavailable] ])
+                    , [request.POST['car_vin'], request.POST['owner'], request.POST['unavailable']])
             status = 'Unavailable edited successfully!'
-            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s AND unavailable = %s", [car_vin,unavailable])
+            cursor.execute("SELECT * FROM unavailable WHERE car_vin = %s AND unavailable = %s", [car_vin,datetime.datetime.strptime(unavailable,'%b %d %Y').strftime('%m/%d/%Y')])
             obj = cursor.fetchone()
 
     context["obj"] = obj
@@ -302,7 +302,7 @@ def editrentalcarinfo(request,car_vin, pick_up): #<input type="hidden" name="car
                     , [request.POST['owner'], request.POST['renter'], request.POST['car_vin'], request.POST['pick_up'],request.POST['drop_off'],
                       request.POST['rental_fee'],request.POST['car_vin']])
             status = 'Rental edited successfully!'
-            cursor.execute("SELECT * FROM rentals WHERE car_vin = %s", [car_vin])
+            cursor.execute("SELECT * FROM rentals WHERE car_vin = %s AND pick_up = %s", [car_vin,datetime.datetime.strptime(pick_up,'%b %d %Y').strftime('%m/%d/%Y')])
             obj = cursor.fetchone()
 
     context["obj"] = obj
