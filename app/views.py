@@ -390,7 +390,7 @@ def addrentalcarinfo(request):
                 string = str(e)
                 message = ""
                 if 'duplicate key value violates unique constraint "rentals_pkey"' in string:  
-                    message = 'The email has already been used by another user!' ####################################### to edit
+                    message = 'Pick-up date for this Car VIN already exists!' ####################################### to edit
                 elif 'new row for relation "rentals" violates check constraint "rentals_pick_up_check"' in string: ###### need go see correct error msg
                     message = 'Please check that drop_off date is not before pick_up date!'
                 elif 'new row for relation "rentals" violates check constraint "users_mobile_number_check"' in string:
